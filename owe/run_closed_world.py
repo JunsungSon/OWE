@@ -8,7 +8,7 @@ from owe.models import KGCFactory
 from owe.config import Config
 from owe.closed_world_prediction import evaluate_closed_world
 
-LOG_LEVEL = logging.DEBUG
+LOG_LEVEL = logging.INFO
 logger = logging.getLogger("owe")
 
 
@@ -35,6 +35,8 @@ def parse_args():
     model_parser.add_argument('--distmult', help="Load a pretrained DistMult model from given directory.")
     model_parser.add_argument('--transe', help="Load a pretrained TransE model from given directory.")
     model_parser.add_argument('--complex', help="Load a pretrained ComplEx model from given directory.")
+    model_parser.add_argument('--pbg_trans', help="Load a pretrained PBG Trans model from given directory.")
+    model_parser.add_argument('--pbg_complex', help="Load a pretrained PBG ComplEx model from given directory.")
 
     model_parser.add_argument('--rotate', help="Load a pretrained RotatE model from given directory.")
     parser.add_argument('--gamma', help="Specify the gamma value of the pretrained RotatE model.", required=False, type=float)
@@ -49,7 +51,7 @@ def parse_args():
 
 
 def basic_config():
-    Config.set("device", "cuda")
+    Config.set("device", "cpu")
     Config.set("ConvertEntities", False)
     Config.set("InitializeEmbeddingWithAllEntities", False)
 
@@ -82,6 +84,10 @@ def main():
         model_name, model_dir = "transe", Path(args.transe)
     elif args.distmult:
         model_name, model_dir = "distmult", Path(args.distmult)
+    elif args.pbg_trans:
+        model_name, model_dir = "pbg_trans", Path(args.pbg_trans)
+    elif args.pbg_complex:
+        model_name, model_dir = "pbg_complex", Path(args.pbg_complex)
     elif args.rotate:
         model_name, model_dir = "rotate", Path(args.rotate)
         if args.gamma is None:
@@ -89,7 +95,7 @@ def main():
 
     model = KGCFactory.get_model(model_name, dataset.train.num_entities, dataset.vocab.num_relations,
                                  args.embedding_dim, rotate_gamma=args.gamma)
-    model = model.to("cuda")
+    model = model.to("cpu")
     model.init_embeddings(dataset, model_dir)
 
     if args.evaluate:

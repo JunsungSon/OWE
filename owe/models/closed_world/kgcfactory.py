@@ -1,6 +1,6 @@
 from typing import Optional
 
-from owe.models import ComplEx, DistMult, TransE, RotatE
+from owe.models import ComplEx, DistMult, TransE, RotatE, PBGTrans, PBGComplEx
 
 
 class KGCFactory:
@@ -25,5 +25,13 @@ class KGCFactory:
                           num_relations=num_relations,
                           embedding_dim=embedding_dim,
                           gamma=rotate_gamma)
+        elif model_name.lower() == "pbg_trans":
+            return PBGTrans(num_entities=num_entities,
+                          num_relations=num_relations,
+                          embedding_dim=embedding_dim)
+        elif model_name.lower() == "pbg_complex":
+            return PBGComplEx(num_entities=num_entities,
+                           num_relations=num_relations,
+                           embedding_dim=embedding_dim)
         else:
             raise ValueError(f"LinkPredictionModelType '{model_name}' unknown")

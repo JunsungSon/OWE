@@ -3,6 +3,8 @@ from owe.models.closed_world.distmult import DistMult
 from owe.models.closed_world.transe import TransE
 from owe.models.closed_world.complex import ComplEx
 from owe.models.closed_world.rotate import RotatE
+from owe.models.closed_world.pbg_trans import PBGTrans
+from owe.models.closed_world.pbg_complex import PBGComplEx
 from owe.models.closed_world.kgcfactory import KGCFactory
 
 from owe.models.open_world.aggregation import Encoder, LSTMEncoder, CNNEncoder, AvgEncoder
